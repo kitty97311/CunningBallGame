@@ -1,0 +1,159 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &3402822077881026612
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6305471832775657519, guid: c90a2d4b936834fe38a2d66365e36792,
+        type: 3}
+      propertyPath: m_Name
+      value: Ball Thrower Shell BL
+      objectReference: {fileID: 0}
+    - target: {fileID: 6686255096615096981, guid: c90a2d4b936834fe38a2d66365e36792,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6686255096615096981, guid: c90a2d4b936834fe38a2d66365e36792,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.92
+      objectReference: {fileID: 0}
+    - target: {fileID: 6686255096615096981, guid: c90a2d4b936834fe38a2d66365e36792,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6686255096615096981, guid: c90a2d4b936834fe38a2d66365e36792,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -4.78
+      objectReference: {fileID: 0}
+    - target: {fileID: 6686255096615096981, guid: c90a2d4b936834fe38a2d66365e36792,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.64278775
+      objectReference: {fileID: 0}
+    - target: {fileID: 6686255096615096981, guid: c90a2d4b936834fe38a2d66365e36792,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6686255096615096981, guid: c90a2d4b936834fe38a2d66365e36792,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7660444
+      objectReference: {fileID: 0}
+    - target: {fileID: 6686255096615096981, guid: c90a2d4b936834fe38a2d66365e36792,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6686255096615096981, guid: c90a2d4b936834fe38a2d66365e36792,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6686255096615096981, guid: c90a2d4b936834fe38a2d66365e36792,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -260
+      objectReference: {fileID: 0}
+    - target: {fileID: 6686255096615096981, guid: c90a2d4b936834fe38a2d66365e36792,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5512816377074592250, guid: c90a2d4b936834fe38a2d66365e36792, type: 3}
+    - {fileID: 7738734473389038896, guid: c90a2d4b936834fe38a2d66365e36792, type: 3}
+    - {fileID: 7949412079260633220, guid: c90a2d4b936834fe38a2d66365e36792, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: c90a2d4b936834fe38a2d66365e36792, type: 3}
+--- !u!4 &8355049442257656481 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6686255096615096981, guid: c90a2d4b936834fe38a2d66365e36792,
+    type: 3}
+  m_PrefabInstance: {fileID: 3402822077881026612}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &9114331687375820563
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8355049442257656481}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 698345e47b6da43788b9ceb98fe2d7ee,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 698345e47b6da43788b9ceb98fe2d7ee,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 698345e47b6da43788b9ceb98fe2d7ee,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.213
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 698345e47b6da43788b9ceb98fe2d7ee,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 698345e47b6da43788b9ceb98fe2d7ee,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 698345e47b6da43788b9ceb98fe2d7ee,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 698345e47b6da43788b9ceb98fe2d7ee,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 698345e47b6da43788b9ceb98fe2d7ee,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 698345e47b6da43788b9ceb98fe2d7ee,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 698345e47b6da43788b9ceb98fe2d7ee,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 698345e47b6da43788b9ceb98fe2d7ee,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 698345e47b6da43788b9ceb98fe2d7ee,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: dd409a3b020504839b9601a3b60592ef, type: 2}
+    - target: {fileID: 919132149155446097, guid: 698345e47b6da43788b9ceb98fe2d7ee,
+        type: 3}
+      propertyPath: m_Name
+      value: Stage 8 Ball Thrower
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 698345e47b6da43788b9ceb98fe2d7ee,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 698345e47b6da43788b9ceb98fe2d7ee, type: 3}
