@@ -49,15 +49,15 @@ public class UiManager : MonoBehaviour
 
     void Start()
     {
-        if (PlayerInstance.playerInstance.playerData.playerName == null) return;
-        playerNameHomescreen.text = PlayerInstance.playerInstance.playerData.playerName.ToString();
+        if (PlayerInstance.Instance.Player.name == null) return;
+        playerNameHomescreen.text = PlayerInstance.Instance.Player.name.ToString();
         UiScreenStates = UiScreens.HomeScreen;
         GoogleAdsMediation.OnNoAdsAvailable += ShowNoADsPanel;
     }
     private void OnEnable()
     {
-        if (PlayerInstance.playerInstance.playerData.playerName == null) return;
-        playerNameHomescreen.text = PlayerInstance.playerInstance.playerData.playerName.ToString();
+        if (PlayerInstance.Instance.Player.name == null) return;
+        playerNameHomescreen.text = PlayerInstance.Instance.Player.name.ToString();
     }
     private void OnDisable()
     {

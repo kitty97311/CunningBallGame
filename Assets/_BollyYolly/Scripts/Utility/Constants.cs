@@ -22,6 +22,7 @@ public class Constants
 
 
     //Scenes Names
+    public const string SCENE_PRACTICE = "PracticeLevel";
     public const string SCENE_LOGIN = "0. LoginScreen";
     public const string SCENE_START = "1. StartScreen";
     public const string SCENE_LEVEL_SELECTION = "2. Levels Screen";

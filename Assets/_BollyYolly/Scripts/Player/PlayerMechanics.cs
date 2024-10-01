@@ -20,13 +20,8 @@ public class PlayerMechanics : MonoBehaviour
 
     internal PlayerStates playerState;
 
-    private float playerSpeed = 0.00025f;
-    public float  PlayerSpeed
-    {
-        get { return playerSpeed; }
-        set { playerSpeed = value; }
-    }
-
+    public float playerSpeed = 0f;
+    
     [SerializeField] private float swipeThreshold = 0.05f;
     [SerializeField] private float moveTiltTime = 0.5f; // time in which player ship will come to idle state
     [SerializeField] private float yPeriod = 0.5f; // y frequency
@@ -110,14 +105,12 @@ public class PlayerMechanics : MonoBehaviour
 
         StartCoroutine(GetDefaultMaterialForCar());
         CheckShipPosition();
-        if (PlayerInstance.playerInstance.playerData.sensitivityValue == 0) return;
-        playerSpeed = PlayerInstance.playerInstance.playerData.sensitivityValue;
 
     }
     void SetLevelNumber()
     //sets current level number int(digit)
     {
-        levelNumber = globalSceneManager.GetCurrentLevelNumber();
+        levelNumber = PlayerInstance.Instance.CurrentLevelNumber;
     }
     float GetYPos()
     //gets y coord for car's position, shoots a ray
@@ -142,7 +135,6 @@ public class PlayerMechanics : MonoBehaviour
     }
     void Update()
     {
-
         HandleSfx();
         zAngleValue = transform.localEulerAngles.z > 180f ? transform.localEulerAngles.z - 360f : transform.localEulerAngles.z;
 
@@ -281,7 +273,7 @@ public class PlayerMechanics : MonoBehaviour
     //process killing after a set period of time
     {
         isShocked = true;
-        PlayerInstance.playerInstance.playerData.totalDeaths++;
+        PlayerInstance.Instance.IncreaseDeath();
         GetComponentInChildren<Animator>().SetBool("isKilled", true);
         yield return new WaitForSeconds(3.0f);
 
@@ -326,7 +318,7 @@ public class PlayerMechanics : MonoBehaviour
     IEnumerator FireUp()
     {
         isBurning = true;
-        PlayerInstance.playerInstance.playerData.totalDeaths++;
+        PlayerInstance.Instance.IncreaseDeath();
         GetComponent<AudioSource>().clip = playerAudio.fire;
         GetComponent<AudioSource>().Play(0);
 
@@ -341,7 +333,7 @@ public class PlayerMechanics : MonoBehaviour
     }
     public void HandleSfx()
     {
-        if (PlayerInstance.playerInstance.playerData.sfxSetting == 1)
+        if (PlayerInstance.Instance.Setting.sfx)
         {
             if(audioSourcePlayer != null)
             {
@@ -349,7 +341,6 @@ public class PlayerMechanics : MonoBehaviour
             }
         }
         else
-        if (PlayerInstance.playerInstance.playerData.sfxSetting == 0)
         {
             if (audioSourcePlayer != null)
             {
@@ -469,10 +460,8 @@ public class PlayerMechanics : MonoBehaviour
         {
             if (cpuPos == PlayerPos.Bottom)
             {
-                Debug.Log("Moving 3");
                 float initDownPos = Input.GetAxis("Mouse X"); // get the change in x
                 float clampedInitDownPos = Mathf.Clamp(initDownPos, -1f, 1f); // clamping it for z rotation
-                                                                              //print(clampedInitDownPos);
                 if (Mathf.Abs(initDownPos) > swipeThreshold)
                 {
                     // some necessary checks 
@@ -485,7 +474,7 @@ public class PlayerMechanics : MonoBehaviour
                     // checks end
 
                     clickPressTime += 1;                                                                               // calculating time of effective mouse clicking
-                    float changedXVal = transform.position.x + (initDownPos * playerSpeed * 10000f * Time.deltaTime); // modifying the changed x with the player speed
+                    float changedXVal = transform.position.x + (initDownPos * 10f * Time.deltaTime); // modifying the changed x with the player speed
                     float clampedXVal = Mathf.Clamp(changedXVal, playerMovementXLimit, playerMovementYLimit);         // clamping x transfrom
                                                                                                                       //transform.position = new Vector3(clampedXVal, transform.position.y, transform.position.z);       // adding the changed x to transform
                     Vector3 newPos = new Vector3(clampedXVal, transform.position.y, transform.position.z);
@@ -512,8 +501,8 @@ public class PlayerMechanics : MonoBehaviour
                     // checks end
 
                     clickPressTime += 1;                                                                               // calculating time of effective mouse clicking
-                    float changedXVal = transform.position.z + (initDownPos * playerSpeed * 10000f * Time.deltaTime); // modifying the changed x with the player speed
-                    float clampedXVal = Mathf.Clamp(changedXVal, playerMovementXLimit, playerMovementYLimit);         // clamping x transfrom
+                    float changedXVal = transform.position.z + (initDownPos * playerSpeed * 10f * Time.deltaTime); // modifying the changed x with the player speed
+                    /*float clampedXVal = Mathf.Clamp(changedXVal, playerMovementXLimit, playerMovementYLimit);         // clamping x transfrom*/
                                                                                                                       //transform.position = new Vector3(clampedXVal, transform.position.y, transform.position.z);       // adding the changed x to transform
                     Vector3 newPos = new Vector3(transform.position.x, transform.position.y, changedXVal);
                     transform.position = Vector3.MoveTowards(transform.position, newPos, 1f);

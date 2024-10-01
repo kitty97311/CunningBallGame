@@ -20,13 +20,11 @@ public class WinLoseController : MonoBehaviour
     //double type coll. to store last goeal time
     //against a particular player
 
-    int currentLevelNumber;
     private void Awake()
     {
         levelGameManager = FindObjectOfType<LevelGameManager>();
         gameOverDataPublisher = GetComponent<GameOverDataPublisher>();
         globalSceneManager = FindObjectOfType<GlobalSceneManager>();
-        currentLevelNumber = globalSceneManager.GetCurrentLevelNumber();
     }
     void Start()
     {

@@ -86,7 +86,6 @@ public class LevelGameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SetLevelNumber();
         countDownTimer = level.spawnFrequency;
         gameTimer = level.gameTime;
         totalNoOfBalls = level.maxBallsOnStage - 1;
@@ -130,11 +129,6 @@ public class LevelGameManager : MonoBehaviour
 
     public bool gameOver;
 
-    void SetLevelNumber()
-    //sets current level number int(digit)
-    {
-        levelNumber = globalSceneManager.GetCurrentLevelNumber();
-    }
     void FixedUpdate()
     {
         HandleSfx();
@@ -164,19 +158,12 @@ public class LevelGameManager : MonoBehaviour
     }
     public void HandleSfx()
     {
-        Debug.Log("Goal YNA " + PlayerInstance.playerInstance.playerData.sfxSetting);
-        Debug.Log(PlayerInstance.playerInstance.playerData.sfxSetting == 0);
-        Debug.Log(GetComponent<AudioSource>().volume + " Goal YNAC");
-
-        if (PlayerInstance.playerInstance.playerData.sfxSetting == 1)
+        if (PlayerInstance.Instance.Setting.sfx)
         {
-            Debug.Log("Goal Y");
             GetComponent<AudioSource>().volume = 1;
         }
         else
-        if (PlayerInstance.playerInstance.playerData.sfxSetting == 0)
         {
-            Debug.Log("Goal N");
             GetComponent<AudioSource>().volume = 0;
         }
     }
@@ -190,7 +177,7 @@ public class LevelGameManager : MonoBehaviour
         {
             gettingScores = true;
 
-            canvasDependencyRemover.coin_Text.text = "Coins:" + Utility.NumberToWordConverted(PlayerInstance.playerInstance.playerData.Coins);
+            canvasDependencyRemover.coin_Text.text = "Coins:" + Utility.NumberToWordConverted(PlayerInstance.Instance.Player.coin);
             canvasDependencyRemover.ScoreText.SetActive(false);
 
             if (gameOver == false)
@@ -198,8 +185,6 @@ public class LevelGameManager : MonoBehaviour
                 gameOver = true;
 
                 Banners();
-
-                PlayerInstance.playerInstance.SavePlayer();
 
                 winLoseController.GetAllScores();
                 //calls initiation of getting scores in the said script and then publish score at the game-end screen
@@ -263,11 +248,11 @@ public class LevelGameManager : MonoBehaviour
     //adds a predecided amount of seconds to 
     //to the game timer for cost of one gem
     {
-        if (PlayerInstance.playerInstance.playerData.Gems <= 0)
+        if (PlayerInstance.Instance.Player.gem <= 0)
         //checks if no sufficient gems balance available
         //exits method if gems zero
         {
-            Debug.Log("Not Sufficient Gems available, go get some");
+            Toast.Instance.ShowToast("Insufficient gem!!!");
             return;
         }
 
@@ -307,7 +292,7 @@ public class LevelGameManager : MonoBehaviour
     void Banners()
     {
         canvasDependencyRemover.WinnerListBanner.SetActive(true);
-        canvasDependencyRemover.coin_Text.text = "Coins:" + Utility.NumberToWordConverted(PlayerInstance.playerInstance.playerData.Coins);
+        canvasDependencyRemover.coin_Text.text = "Coins:" + Utility.NumberToWordConverted(PlayerInstance.Instance.Player.coin);
     }
 
     private void InstantiatePlayers()

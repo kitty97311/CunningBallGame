@@ -17,7 +17,7 @@ public class GemsUseHandler : MonoBehaviour
 
     private void Start()
     {
-        if (PlayerInstance.playerInstance.playerData.Gems <= 0)
+        if (PlayerInstance.Instance.Player.gem <= 0)
         {
             //useGemsButton.interactable = false;
             SetButtonNonInteractable();

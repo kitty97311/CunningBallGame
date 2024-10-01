@@ -37,11 +37,11 @@ public class CPUAi : MonoBehaviour
     PlatformTiltHandler platformTiltHandler;
     public LayerMask lm;
 
-    bool isFrozen = false;
-    bool isBurning = false;
-    bool isShocked = false;
-    bool isSpeeding = false;
-    bool isVisible = true;
+    public bool isFrozen = false;
+    public bool isBurning = false;
+    public bool isShocked = false;
+    public bool isSpeeding = false;
+    public bool isVisible = true;
 
     float currentFreezingTimer;
 
@@ -72,7 +72,6 @@ public class CPUAi : MonoBehaviour
         globalSceneManager = FindObjectOfType<GlobalSceneManager>();
         playerAudio = GetComponent<PlayerAudio>();
         SetPlayerName();
-        SetLevelNumber();
         initYValue = transform.position.y;
         initZValue = transform.localEulerAngles.z;
         cpuState = PlayerStates.Idle;
@@ -80,11 +79,7 @@ public class CPUAi : MonoBehaviour
 
         StartCoroutine(GetDefaultMaterialForCar());
     }
-    void SetLevelNumber()
-    //sets current level number int(digit)
-    {
-        levelNumber = globalSceneManager.GetCurrentLevelNumber();
-    }
+    
     void SetPlayerName()
     {
         switch (gameObject.tag)
@@ -103,12 +98,11 @@ public class CPUAi : MonoBehaviour
 
     public void HandleSfx()
     {
-        if (PlayerInstance.playerInstance.playerData.sfxSetting == 1)
+        if (PlayerInstance.Instance.Setting.sfx)
         {
             audioSourcePlayer.volume = 1;
         }
         else
-        if (PlayerInstance.playerInstance.playerData.sfxSetting == 0)
         {
             audioSourcePlayer.volume = 0;
         }

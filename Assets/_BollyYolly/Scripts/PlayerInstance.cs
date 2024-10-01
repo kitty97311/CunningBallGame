@@ -1,19 +1,16 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Networking;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class PlayerInstance : MonoBehaviour
 {
-    public string playerName;
-    public int totalMatchesPlayed;
-    public int totalMatchesWon;
-    public int currentLevelNumber;
-    public static PlayerInstance playerInstance;
-
-    //TODO Make this as property if we can stop calling his method directly
-    internal PlayerData playerData;
+    public int CurrentLevelNumber = 0;
+    public string[] enemyNames = { "P1", "P2", "P3" };
+    public static PlayerInstance Instance { get; private set; }
 
     #region Events
 
@@ -21,79 +18,201 @@ public class PlayerInstance : MonoBehaviour
     public Action<int> GameGemsUpdated;
 
     #endregion
-
-
     private void Awake()
     {
-        playerInstance = this;
-        DontDestroyOnLoad(this);
-        LoadPlayer();
-    }
-    public void SavePlayer()
-    {
-        //Debug.Log("Saving");
-        SaveSystem.SavePlayer(playerData);
-    }
-
-    public void LoadPlayer()
-    {
-        //Debug.Log("Loading");
-        playerData = SaveSystem.LoadPlayer();
-        if (playerData == null)
+        // Ensure this instance is the only one  
+        if (Instance == null)
         {
-            LoadDefaultPlayerValues();
-            return;
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Prevent this object from being destroyed when loading new scenes  
+            Player = new PlayerModel
+            {
+                name = "kitty",
+                email = "a@b.c",
+                coin = 1997311,
+                gem = 311,
+                match = 103,
+                win = 43,
+                death = 35
+            };
+            LoadSetting();
         }
-        playerName = playerData.playerName;
-        currentLevelNumber = playerData.currentLevelNumber;
+        else
+        {
+            Destroy(gameObject); // Destroy duplicate instances  
+        }
     }
 
-    public void LoadDefaultPlayerValues()
+    internal PlayerModel Player;
+    public class PlayerModel
     {
-        playerData = new PlayerData(this);
-        //{
-        //    playerName = Constants.DEFAULT_PLAYER_NAMES[UnityEngine.Random.Range(0, Constants.DEFAULT_PLAYER_NAMES.Count)]
-        //};
+        public string name = "";
+        public string email = "";
+        public long coin = 0;
+        public int gem = 0;
+        public int match = 0;
+        public int win = 0;
+        public int death = 0;
+    }
+    internal SettingModel Setting;
+
+    [System.Serializable]
+    public class SettingModel
+    {
+        public bool music = true;
+        public bool sfx = true;
+        public int sensitivity = 9; // Min: 1, Max:9
     }
 
+
+    // If you charge coin or gem, param should be positive number else negative number. e.g: coin = -100 or gem = 10
+    public IEnumerator UpdatePlayerInfo()
+    {
+
+        string jsonString = JsonUtility.ToJson(Player);
+
+        // Create a UnityWebRequest for a POST request
+        using UnityWebRequest www = new UnityWebRequest("http://192.168.12.139:8000/cunning-updateplayerinfo", "POST");
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonString);
+        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        www.downloadHandler = new DownloadHandlerBuffer();
+        www.SetRequestHeader("Content-Type", "application/json");
+
+        // Send the request and wait for a response
+        yield return www.SendWebRequest();
+
+        JObject resJson = JObject.Parse(www.downloadHandler.text);
+        // Check for errors
+        if (www.responseCode == 200)
+        {
+            JObject playerJson = JObject.Parse(resJson["player"].ToString());
+            Player = new PlayerModel
+            {
+                email = playerJson["email"].ToString(),
+                coin = (long)playerJson["coin"],
+                gem = (int)playerJson["gem"],
+                match = (int)playerJson["match"],
+                win = (int)playerJson["win"],
+                death = (int)playerJson["death"]
+            };
+            Debug.Log("Player info updated");
+        }
+        else
+        {
+            Toast.Instance.ShowToast("Connection error!");
+        }
+    }
+
+    // If you charge coin or gem, param should be positive number else negative number. e.g: coin = -100 or gem = 10
+    private IEnumerator GetPlayerInfo(string email)
+    {
+        PlayerModel player = new PlayerModel { email = email };
+        string jsonString = JsonUtility.ToJson(player);
+
+        // Create a UnityWebRequest for a POST request
+        using UnityWebRequest www = new UnityWebRequest("http://192.168.12.139:8000/cunning-getplayerinfo", "POST");
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonString);
+        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        www.downloadHandler = new DownloadHandlerBuffer();
+        www.SetRequestHeader("Content-Type", "application/json");
+
+        // Send the request and wait for a response
+        yield return www.SendWebRequest();
+
+        JObject resJson = JObject.Parse(www.downloadHandler.text);
+        // Check for errors
+        if (www.responseCode == 200)
+        {
+            JObject playerJson = JObject.Parse(resJson["player"].ToString());
+            Player = new PlayerModel
+            {
+                email = playerJson["email"].ToString(),
+                coin = (long)playerJson["coin"],
+                gem = (int)playerJson["gem"],
+                match = (int)playerJson["match"],
+                win = (int)playerJson["win"],
+                death = (int)playerJson["death"]
+            };
+        }
+        else
+        {
+            Toast.Instance.ShowToast("Connection error!");
+        }
+    }
+
+    #region Save Cache Data
+    public void SaveSetting()
+    {
+        string path = Application.persistentDataPath + "/settings.json";
+
+        // Serialize the setting object to a JSON string
+        string jsonData = JsonUtility.ToJson(Setting);
+
+        // Write the JSON string to a file
+        File.WriteAllText(path, jsonData);
+
+        Debug.Log("Settings saved: " + jsonData);
+    }
+
+    public void LoadSetting()
+    {
+        string path = Application.persistentDataPath + "/settings.json";
+
+        if (File.Exists(path))
+        {
+            // Read the JSON data from the file
+            string jsonData = File.ReadAllText(path);
+
+            // Deserialize the JSON data back into the Setting object
+            Setting = JsonUtility.FromJson<SettingModel>(jsonData);
+
+            Debug.Log("Settings loaded: " + jsonData);
+        }
+        else
+        {
+            Debug.LogWarning("No settings file found.");
+        }
+    }
+    #endregion
 
     #region Currency Management
 
     public void AddCoins(long amount)
     {
-        playerData.AddCoins(amount);
-        UpdateSystemCoins();
+        Player.coin += amount;
+        StartCoroutine(UpdatePlayerInfo());
     }
 
-    public void DeductCoins(int amount)
+    public void DeductCoins(long amount)
     {
-        playerData.DeductCoins(amount);
-        UpdateSystemCoins();
-    }
-
-    //For Updating on UI and other parts
-    private void UpdateSystemCoins()
-    {
-        if (GameCoinsUpdated != null) { GameCoinsUpdated.Invoke(playerData.Coins); }
-        SavePlayer();
+        Player.coin -= amount;
+        StartCoroutine(UpdatePlayerInfo());
     }
 
     internal void AddGems(int amount)
     {
-        playerData.AddGems(amount);
-        UpdateSystemGems();
+        Player.gem += amount;
+        StartCoroutine(UpdatePlayerInfo());
     }
-    internal void RemoveGems(int amount)
+    internal void DeductGems(int amount)
     {
-        playerData.DeductGems(amount);
-        UpdateSystemGems();
+        Player.gem -= amount;
+        StartCoroutine(UpdatePlayerInfo());
     }
-
-    //For Updating on UI and other parts
-    private void UpdateSystemGems()
+    internal void IncreaseMatch()
     {
-        if (GameGemsUpdated != null) { GameGemsUpdated.Invoke(playerData.Gems); }
-        SavePlayer();
+        Player.match ++;
+        StartCoroutine(UpdatePlayerInfo());
+    }
+    internal void IncreaseWin()
+    {
+        Player.win ++;
+        StartCoroutine(UpdatePlayerInfo());
+    }
+    internal void IncreaseDeath()
+    {
+        Player.death ++;
+        StartCoroutine(UpdatePlayerInfo());
     }
 
     #endregion

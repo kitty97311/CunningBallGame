@@ -34,8 +34,8 @@ public class CanvasDependencyRemover : MonoBehaviour
 
     private void Start()
     {
-        if (PlayerInstance.playerInstance.playerData.playerName == null) return;
-        playerName.text = PlayerInstance.playerInstance.playerData.playerName.ToString();
+        if (PlayerInstance.Instance.Player.name == null) return;
+        playerName.text = PlayerInstance.Instance.Player.name.ToString();
     }
 
     public void OpenSensitivityPanel()

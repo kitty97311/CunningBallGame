@@ -9,24 +9,22 @@ public class Ball : MonoBehaviour
     public int lastHitPlayer;
     private void Awake()
     {
-        if (PlayerInstance.playerInstance.playerData.sfxSetting == 0)
+        if (PlayerInstance.Instance.Setting.sfx)
         {
             GetComponent<AudioSource>().volume = 0;
         }
         else
-        if (PlayerInstance.playerInstance.playerData.sfxSetting == 1)
         {
             GetComponent<AudioSource>().volume = 1;
         }
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (PlayerInstance.playerInstance.playerData.sfxSetting == 0)
+        if (PlayerInstance.Instance.Setting.sfx)
         {
             GetComponent<AudioSource>().volume = 0;
         }
         else
-        if (PlayerInstance.playerInstance.playerData.sfxSetting == 1)
         {
             GetComponent<AudioSource>().volume = 1;
         }

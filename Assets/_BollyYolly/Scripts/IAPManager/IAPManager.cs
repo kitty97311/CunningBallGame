@@ -89,11 +89,11 @@ public class IAPManager : MonoBehaviour
 
     void AddCoins(long coin)
     {
-        PlayerInstance.playerInstance.AddCoins(coin);
+        PlayerInstance.Instance.AddCoins(coin);
     }
 
     void AddGems(int Gem)
     {
-        PlayerInstance.playerInstance.AddGems(Gem);
+        PlayerInstance.Instance.AddGems(Gem);
     }
 }

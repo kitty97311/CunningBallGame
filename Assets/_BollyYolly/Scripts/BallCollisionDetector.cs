@@ -23,7 +23,7 @@ public class BallCollisionDetector : MonoBehaviour
         levelGameManager = FindObjectOfType<LevelGameManager>();
         globalSceneManager = FindObjectOfType<GlobalSceneManager>();
         destroyTime = levelGameManager.level.spawnFrequency;
-        levelNumber = globalSceneManager.GetCurrentLevelNumber();
+        levelNumber = PlayerInstance.Instance.CurrentLevelNumber;
         LevelSixChecker();
         LevelTenChecker();
     }
@@ -51,16 +51,10 @@ public class BallCollisionDetector : MonoBehaviour
         {
             GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
             minBallVelocity = 8f;
-            SetLevelNumber();
             GetComponent<SphereCollider>().material.bounciness = 1;
         }
     }
 
-    void SetLevelNumber()
-    //sets level number int(digit)
-    {
-        levelNumber = globalSceneManager.GetCurrentLevelNumber();
-    }
     void Update()
     {
         if (yPosBallAfterLanding > 0f && transform.parent == null)

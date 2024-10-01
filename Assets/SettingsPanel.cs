@@ -15,7 +15,7 @@ public class SettingsPanel : MonoBehaviour
     [SerializeField] Slider sensitivitySlider;
 
     [SerializeField] Text sensitivityValue;
-    [SerializeField] TextMeshProUGUI playerNameHomescreen;
+    /*[SerializeField] TextMeshProUGUI playerNameHomescreen;*/
     //player name/username reference for the homescreen
 
     AudioSource[] musicAudioSource;
@@ -24,42 +24,15 @@ public class SettingsPanel : MonoBehaviour
 
     [SerializeField] int sensitivityRoundTo = 2;
 
-    PlayerData playerDataToSet;
-
     [SerializeField] GameObject settingMenuButton;
     //settings menu button InLevel
     private void Start()
     {
-        if (PlayerInstance.playerInstance.playerData.secondStart == false)
-        {
-            Debug.Log("First");
-            SetInitialValues();
-        }
-        else
-        {
-            levelGameManager = FindObjectOfType<LevelGameManager>();
-            SetDataLoadFromPlayerInstance();
-        }
+        SetDataLoadFromPlayerInstance();
         StartNew();
         gameObject.SetActive(false);
     }
-    void SetInitialValues()
-    {
-        Debug.Log("SetInitialValues");
-        PlayerInstance.playerInstance.playerData.musicSetting = 1;
-        PlayerInstance.playerInstance.playerData.sfxSetting = 1;
-        PlayerInstance.playerInstance.playerData.sensitivityValue = 5 / 5000f;
-        PlayerInstance.playerInstance.playerData.secondStart = true;
-        PlayerInstance.playerInstance.SavePlayer();
 
-        Debug.Log(PlayerInstance.playerInstance.playerData.sensitivityValue);
-
-        sfxSlider.value = 1;
-        musicSlider.value = 1;
-        sensitivitySlider.value = 5;
-
-        Debug.Log(sensitivitySlider.value);
-    }
     void StartNew() 
     {
         if (FindObjectOfType<PlayerMechanics>() != null)
@@ -98,25 +71,13 @@ public class SettingsPanel : MonoBehaviour
     }
     private void OnEnable()
     {
-        //Debug.Log(PlayerInstance.playerInstance.playerData.sensitivityValue * 2000);
         Time.timeScale = 0;
-        if (PlayerInstance.playerInstance.playerData.secondStart)
-        {
-            //Debug.Log("2nd start First");
-            SetDataLoadFromPlayerInstance();
-            HandleInitialValues();
-        }
-
         if (settingMenuButton == null) return;
         settingMenuButton.SetActive(false);
     }
     private void OnDisable()
     {
-        //Debug.Log(PlayerInstance.playerInstance.playerData.musicSetting + " Music VAL");
-        //Debug.Log(PlayerInstance.playerInstance.playerData.sfxSetting + " SFX VAL");
-        //Debug.Log(PlayerInstance.playerInstance.playerData.sensitivityValue * 2000 + " Sensitivity VAL");
-        //PlayerInstance.playerInstance.playerData = playerDataToSet;
-        PlayerInstance.playerInstance.SavePlayer();
+        PlayerInstance.Instance.SaveSetting();
         Time.timeScale = 1;
         if (settingMenuButton != null)
         {
@@ -131,38 +92,9 @@ public class SettingsPanel : MonoBehaviour
     /// </summary>
     void SetDataLoadFromPlayerInstance()
     {
-        PlayerInstance.playerInstance.LoadPlayer();
-        playerDataToSet = PlayerInstance.playerInstance.playerData;
-
-        ////
-        ////Debug.Log(playerDataToSet.musicSetting + " Music VAL");
-        ////Debug.Log(playerDataToSet.sfxSetting + " SFX VAL");
-        ////Debug.Log(playerDataToSet.sensitivityValue + " Sensitivity VAL");
-        ////
-        ////sfxSlider.value = playerDataToSet.sfxSetting;
-        ////musicSlider.value = playerDataToSet.musicSetting;
-        ////
-        
-        sfxSlider.value = PlayerInstance.playerInstance.playerData.sfxSetting;
-        //sets the value of SFX slider
-        musicSlider.value = PlayerInstance.playerInstance.playerData.musicSetting;
-        //sets the value of Music slider
-
-        ////
-        ////decimal roundTo = System.Math.Round((decimal)playerDataToSet.sensitivityValue * (decimal)(5000f), sensitivityRoundTo);
-        ////sensitivityValue.text = roundTo.ToString();
-        ////sensitivitySlider.value = playerDataToSet.sensitivityValue * (5000f);
-        ////
-        
-        decimal roundTo = System.Math.Round((decimal)PlayerInstance.playerInstance.playerData.sensitivityValue * (decimal)(5000f), sensitivityRoundTo);
-        //rounds the sensitivity to 2 digits
-        sensitivityValue.text = roundTo.ToString();
-        //shows sensitivity value on settings panel (not is use) 
-        sensitivitySlider.value = PlayerInstance.playerInstance.playerData.sensitivityValue * (5000f);
-        //sets the sensitivity value to the sensitivity handler
-
-        if (playerMechanics == null) return;
-        playerMechanics.PlayerSpeed = sensitivitySlider.value / (5000f);
+        sfxSlider.value = PlayerInstance.Instance.Setting.sfx ? 1 : 0;
+        musicSlider.value = PlayerInstance.Instance.Setting.music ? 1 : 0;
+        sensitivitySlider.value = PlayerInstance.Instance.Setting.sensitivity;
     }
 
     /// <summary>
@@ -179,14 +111,14 @@ public class SettingsPanel : MonoBehaviour
             //is no audioListner i.e. HomeScreen
             {
                 GamePrefs.ifSfxEnabled = false; 
-                PlayerInstance.playerInstance.playerData.sfxSetting = 0;
+                PlayerInstance.Instance.Setting.sfx = false;
                 //sets sfxSetting in playerInstance to 0 (off)
 
                 if (levelGameManager != null)
                 levelGameManager.HandleSfx();
                 //Handles audio(goal) in LevelGameManager
             }
-            PlayerInstance.playerInstance.playerData.sfxSetting = 0;
+            PlayerInstance.Instance.Setting.sfx = false;
             //sets sfxSetting in playerInstance to 0 (off)
         }
         else
@@ -196,17 +128,17 @@ public class SettingsPanel : MonoBehaviour
             //is no audioListner i.e. HomeScreen
             {
                 GamePrefs.ifSfxEnabled = true;
-                PlayerInstance.playerInstance.playerData.sfxSetting = 1;
+                PlayerInstance.Instance.Setting.sfx = true;
                 //sets sfxSetting in playerInstance to 1 (on)
 
                 if (levelGameManager != null)
                 levelGameManager.HandleSfx();
                 //Handles audio(goal) in LevelGameManager
             }
-            PlayerInstance.playerInstance.playerData.sfxSetting = 1;
+            PlayerInstance.Instance.Setting.sfx = true;
             //sets sfxSetting in playerInstance to 1 (on)
         }
-        //Debug.Log(PlayerInstance.playerInstance.playerData.sfxSetting + "VAL");
+        //Debug.Log(PlayerInstance.Instance.Settttt.sfxSetting + "VAL");
     }
 
     /// <summary>
@@ -220,12 +152,12 @@ public class SettingsPanel : MonoBehaviour
         {
             if (musicAudioSource != null)
             {
-                PlayerInstance.playerInstance.playerData.musicSetting = 0;
+                PlayerInstance.Instance.Setting.music = false;
                 //sets sfxSetting in playerInstance to 0 (off)
                 musicAudioSource[1].volume = 0;
                 //sets volume to 0 (music)
             }
-            PlayerInstance.playerInstance.playerData.musicSetting = 0;
+            PlayerInstance.Instance.Setting.music = false;
             //sets sfxSetting in playerInstance to 0 (off)
         }
         else
@@ -233,31 +165,24 @@ public class SettingsPanel : MonoBehaviour
         {
             if (musicAudioSource != null)
             {
-                PlayerInstance.playerInstance.playerData.musicSetting = 1;
+                PlayerInstance.Instance.Setting.music = true;
                 //sets sfxSetting in playerInstance to 1 (on)
                 musicAudioSource[1].volume = 1;
                 //sets volume to 0 (music)
             }
-            PlayerInstance.playerInstance.playerData.musicSetting = 1;
+            PlayerInstance.Instance.Setting.music = true;
             //sets sfxSetting in playerInstance to 1 (on)
         }
-        //Debug.Log(PlayerInstance.playerInstance.playerData.musicSetting + "VAL");
+        //Debug.Log(PlayerInstance.Instance.Settttt.musicSetting + "VAL");
     }
 
 
     void HandleSensitivity()
     {
-        if (playerMechanics != null)
-        {
-            playerMechanics.PlayerSpeed = sensitivitySlider.value / (5000f);
-        }
+        playerMechanics.playerSpeed = sensitivitySlider.value / (500f);
 
-        decimal roundTo = System.Math.Round((decimal)sensitivitySlider.value, sensitivityRoundTo);
-        sensitivityValue.text = roundTo.ToString();
-        PlayerInstance.playerInstance.playerData.sensitivityValue = sensitivitySlider.value / (5000f);
-
-
-        Debug.Log(PlayerInstance.playerInstance.playerData.sensitivityValue + "VAL");
+        sensitivityValue.text = sensitivitySlider.value.ToString();
+        PlayerInstance.Instance.Setting.sensitivity = (int) sensitivitySlider.value;
     }
 
 

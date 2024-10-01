@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class PlayerData
+public class GameSetting
 {
 
     #region Variables
 
     public int currentLevelNumber;
     public int eligibleForLevel;
-
-    public string playerName;
 
     public int totalTournamentsWin;
     public int totalMatchesPlayed;
@@ -28,8 +26,10 @@ public class PlayerData
     public float sensitivityValue;
     public bool secondStart;
 
-    private long coins = 0;
-    private int gems = 0;
+    public string playerName;
+    private long coins;
+    private int gems;
+
     #endregion
 
     #region Properties
@@ -40,12 +40,6 @@ public class PlayerData
 
     #endregion
 
-
-    public PlayerData(PlayerInstance player)
-    {
-        //playerName = player.playerName;
-        //  levelUnlocked = player.levelUnlocked;
-    }
     #region Properties
     //TODO: Getters of Coins, gems, player name, gems etc
     #endregion

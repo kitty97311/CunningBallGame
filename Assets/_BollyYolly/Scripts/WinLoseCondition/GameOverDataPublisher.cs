@@ -50,8 +50,7 @@ public class GameOverDataPublisher : MonoBehaviour
     {
         winLoseController = GetComponent<WinLoseController>();
         globalSceneManager = FindObjectOfType<GlobalSceneManager>();
-        currentLevelNumber = globalSceneManager.GetCurrentLevelNumber();
-        currentLevelNumber = globalSceneManager.GetCurrentLevelNumber();
+        currentLevelNumber = PlayerInstance.Instance.CurrentLevelNumber;
     }
 
     public void GetFinalScoreData()
@@ -87,13 +86,13 @@ public class GameOverDataPublisher : MonoBehaviour
     //awards coins at the end of the game
     //according to the rank
     {
-        int currentLevel = PlayerInstance.playerInstance.playerData.currentLevelNumber;
-        long currentLevelFee = levels[PlayerInstance.playerInstance.playerData.currentLevelNumber].entryFees;
+        long currentLevelFee = levels[PlayerInstance.Instance.CurrentLevelNumber].entryFees;
         if (rankedPlayersArray[0] == 1)
         {
-            PlayerInstance.playerInstance.playerData.eligibleForLevel = currentLevel;
+            //kittymark
+            /*PlayerInstance.Instance.Settttt.eligibleForLevel = currentLevel;*/
             //set highest level won
-            PlayerInstance.playerInstance.AddCoins(currentLevelFee * 4);
+            PlayerInstance.Instance.AddCoins(currentLevelFee * 4);
             //adds coin awards for Rank1
         }
         //rankedPlayersArray[0] = // add coins 4 times the price of entry
@@ -106,9 +105,9 @@ public class GameOverDataPublisher : MonoBehaviour
     internal void PublishFinalScoreData(Dictionary<string, int> playersWithScrores)
     //publish final data accordingly
     {
-        PlayerInstance.playerInstance.playerData.totalMatchesPlayed++;
-        rank1PrizeAmount.text = " " + Utility.NumberToWordConverted((levels[PlayerInstance.playerInstance.playerData.currentLevelNumber].entryFees * 4)).ToString();
-        rank2PrizeAmount.text = " " + Utility.NumberToWordConverted((levels[PlayerInstance.playerInstance.playerData.currentLevelNumber].entryFees)).ToString();
+        PlayerInstance.Instance.IncreaseMatch();
+        rank1PrizeAmount.text = " " + Utility.NumberToWordConverted((levels[PlayerInstance.Instance.CurrentLevelNumber].entryFees * 4)).ToString();
+        rank2PrizeAmount.text = " " + Utility.NumberToWordConverted((levels[PlayerInstance.Instance.CurrentLevelNumber].entryFees)).ToString();
         //TODO: Remove foreach form here and move it to WinLoseCalculation
         {
             int i = 0;
@@ -129,9 +128,7 @@ public class GameOverDataPublisher : MonoBehaviour
                     if (i == 0 && !isWinnerDecided)
                     {
                         //gameOverScreen.transform.GetChild(0).GetComponent<Text>().text = "YOU WON";
-                        PlayerInstance.playerInstance.playerData.totalMatchesWon++;
-                        PlayerInstance.playerInstance.playerData.winningStreak++;
-                        PlayerInstance.playerInstance.SavePlayer();
+                        PlayerInstance.Instance.IncreaseWin();
 
                         isWinnerDecided = true;
                     }
@@ -140,7 +137,8 @@ public class GameOverDataPublisher : MonoBehaviour
                 }
                 else if (!isWinnerDecided)
                 {
-                    PlayerInstance.playerInstance.playerData.winningStreak = 0;
+                    //kittymark
+                    /*PlayerInstance.Instance.Settttt.winningStreak = 0;*/
                     //gameOverScreen.transform.GetChild(0).GetComponent<Text>().text = "YOU LOST";
                 }
                 if (author.Key == "Player1")
@@ -150,7 +148,6 @@ public class GameOverDataPublisher : MonoBehaviour
                 i++;
             }
             isWinnerDecided = false;
-            PlayerInstance.playerInstance.SavePlayer();
             settingMenuButton.SetActive(false);
         }
     }
@@ -159,20 +156,20 @@ public class GameOverDataPublisher : MonoBehaviour
         switch (playerRank)
         {
             case 0:
-                if (PlayerInstance.playerInstance.playerData.playerName == null) break;
-                rank1PlayerName.text = PlayerInstance.playerInstance.playerData.playerName.ToString();
+                if (PlayerInstance.Instance.Player.name == null) break;
+                rank1PlayerName.text = PlayerInstance.Instance.Player.name.ToString();
                 break;
             case 1:
-                if (PlayerInstance.playerInstance.playerData.playerName == null) break;
-                rank2PlayerName.text = PlayerInstance.playerInstance.playerData.playerName.ToString();
+                if (PlayerInstance.Instance.Player.name == null) break;
+                rank2PlayerName.text = PlayerInstance.Instance.Player.name.ToString();
                 break;
             case 2:
-                if (PlayerInstance.playerInstance.playerData.playerName == null) break;
-                rank3PlayerName.text = PlayerInstance.playerInstance.playerData.playerName.ToString();
+                if (PlayerInstance.Instance.Player.name == null) break;
+                rank3PlayerName.text = PlayerInstance.Instance.Player.name.ToString();
                 break;
             case 3:
-                if (PlayerInstance.playerInstance.playerData.playerName == null) break;
-                rank4PlayerName.text = PlayerInstance.playerInstance.playerData.playerName.ToString();
+                if (PlayerInstance.Instance.Player.name == null) break;
+                rank4PlayerName.text = PlayerInstance.Instance.Player.name.ToString();
                 break;
         }
     }
@@ -180,10 +177,9 @@ public class GameOverDataPublisher : MonoBehaviour
     //TODO: Remove below 2 methods 'RewardUser()' & 'UnlockLevel()' form here and move it to WinLoseCalculation
     private void RewardUser(int playerPosition)
     {
-        Debug.Log(PlayerInstance.playerInstance.playerData.currentLevelNumber);
-        PlayerInstance.playerInstance.AddCoins(playerPosition == 0
-                        ? levels[PlayerInstance.playerInstance.playerData.currentLevelNumber].entryFees * 4 // As 25% reward
-                        : levels[PlayerInstance.playerInstance.playerData.currentLevelNumber].entryFees
+        PlayerInstance.Instance.AddCoins(playerPosition == 0
+                        ? levels[PlayerInstance.Instance.CurrentLevelNumber].entryFees * 4 // As 25% reward
+                        : levels[PlayerInstance.Instance.CurrentLevelNumber].entryFees
                         );
 
 
@@ -193,11 +189,11 @@ public class GameOverDataPublisher : MonoBehaviour
     {
         if(player1Rank == 0)
         {
-            player1WinningAmount = levels[PlayerInstance.playerInstance.playerData.currentLevelNumber].entryFees * 4;
+            player1WinningAmount = levels[PlayerInstance.Instance.CurrentLevelNumber].entryFees * 4;
         }
         else if (player1Rank == 1)
         {
-            player1WinningAmount = levels[PlayerInstance.playerInstance.playerData.currentLevelNumber].entryFees;
+            player1WinningAmount = levels[PlayerInstance.Instance.CurrentLevelNumber].entryFees;
         }
         else if (player1Rank == 2 || player1Rank == 3)
         {
@@ -207,12 +203,13 @@ public class GameOverDataPublisher : MonoBehaviour
     }
     private void UnlockLevel()
     {
-        if (PlayerInstance.playerInstance.playerData.currentLevelNumber >= PlayerInstance.playerInstance.playerData.eligibleForLevel)
-            PlayerInstance.playerInstance.playerData.eligibleForLevel++;
+        //kittymark
+        /*if (PlayerInstance.Instance.CurrentLevelNumber >= PlayerInstance.Instance.Settttt.eligibleForLevel)
+            PlayerInstance.Instance.Settttt.eligibleForLevel++;*/
     }
     public long GetCurrentLevelFees()
     {
-        return levels[PlayerInstance.playerInstance.playerData.currentLevelNumber].entryFees;
+        return levels[PlayerInstance.Instance.CurrentLevelNumber].entryFees;
     }
     public long GetCurrentPrizeAmount()
     {

@@ -27,7 +27,9 @@ public class LevelScreenManager : MonoBehaviour
 
     private void VerifyLevelUnlockStatus()
     {
-        int heightesLevelWon = PlayerInstance.playerInstance.playerData.eligibleForLevel + 1;
+        /*int heightesLevelWon = PlayerInstance.Instance.Settttt.eligibleForLevel + 1;*/
+        //kittymark
+        int heightesLevelWon = 10;
 
         for (int i = 0; i < levelButtons.Length; i++)
         {
@@ -90,20 +92,18 @@ public class LevelScreenManager : MonoBehaviour
     //Assuming that level is getting passed with same number i.e. for level 1, passing int 1
     public void LoadLevel(int levelNumber)
     {
-        levelNumber--;
-        if (PlayerInstance.playerInstance.playerData.Coins >= level[levelNumber].entryFees)
+        if (PlayerInstance.Instance.Player.coin >= level[levelNumber - 1].entryFees)
         {
-            {
-                PlayerInstance.playerInstance.playerData.DeductCoins(level[levelNumber].entryFees);
-                PlayerInstance.playerInstance.playerData.currentLevelNumber = levelNumber;
-                PlayerInstance.playerInstance.SavePlayer();
-                Coins.text = /*"Coins: " +*/ Utility.NumberToWordConverted(PlayerInstance.playerInstance.playerData.Coins);
-                Gems.text = Utility.NumberToWordConverted(PlayerInstance.playerInstance.playerData.Gems);
-                PlayerPrefs.SetString(Constants.PREF_SELECTED_LEVEL, "Level " + (levelNumber + 1));
-                SceneManager.LoadScene(Constants.SCENE_CHARACTER_SELECTION);
-                levelSelect.SetActive(false);
-                loadingText.SetActive(true);
-            }
+            PlayerInstance.Instance.CurrentLevelNumber = levelNumber;
+            PlayerInstance.Instance.DeductCoins(level[levelNumber - 1].entryFees);
+            //kittymark
+            /*PlayerInstance.Instance.Settttt.currentLevelNumber = levelNumber;*/
+            Coins.text = Utility.NumberToWordConverted(PlayerInstance.Instance.Player.coin);
+            Gems.text = Utility.NumberToWordConverted(PlayerInstance.Instance.Player.gem);
+            PlayerPrefs.SetString(Constants.PREF_SELECTED_LEVEL, "Level " + (levelNumber));
+            SceneManager.LoadScene(Constants.SCENE_CHARACTER_SELECTION);
+            levelSelect.SetActive(false);
+            loadingText.SetActive(true);
         }
         else
         {
@@ -113,128 +113,10 @@ public class LevelScreenManager : MonoBehaviour
 
     public void UnLockAllLevels()
     {
-        PlayerInstance.playerInstance.playerData.eligibleForLevel = 15;
-        PlayerInstance.playerInstance.SavePlayer();
+        //kittymark
+        /*PlayerInstance.Instance.Settttt.eligibleForLevel = 15;*/
         VerifyLevelUnlockStatus();
     }
-
-    #region //old code not is use
-    public void LoadLevel1()
-    {
-        if (PlayerInstance.playerInstance.playerData.Coins >= level[0].entryFees)
-        {
-            {
-                PlayerInstance.playerInstance.playerData.DeductCoins(level[0].entryFees);
-                PlayerInstance.playerInstance.SavePlayer();
-                Coins.text = /*"Coins:" +*/ Utility.NumberToWordConverted(PlayerInstance.playerInstance.playerData.Coins);
-                Gems.text = Utility.NumberToWordConverted(PlayerInstance.playerInstance.playerData.Gems);
-                PlayerPrefs.SetString("SelectedLevel", "Level 1");
-                SceneManager.LoadScene("Character Selection");
-                levelSelect.SetActive(false);
-                loadingText.SetActive(true);
-            }
-
-        }
-        else
-        {
-            NotEnoughCoins(true);
-        }
-
-    }
-    public void LoadLevel2()
-    {
-        if (PlayerInstance.playerInstance.playerData.Coins >= level[1].entryFees)
-        {
-            //if( PlayerInstance.playerInstance.playerData.currentLevelNumber >= 1)
-            {
-                PlayerInstance.playerInstance.playerData.DeductCoins(level[1].entryFees);
-                PlayerInstance.playerInstance.SavePlayer();
-                Coins.text = "Coins:" + Utility.NumberToWordConverted(PlayerInstance.playerInstance.playerData.Coins);
-                PlayerPrefs.SetString("SelectedLevel", "Level 2");
-                SceneManager.LoadScene("Character Selection");
-                levelSelect.SetActive(false);
-                loadingText.SetActive(true);
-            }
-            //else
-            //{
-            //    levelNotUnlocked.SetActive(true);
-            //}
-        }
-        else
-        {
-            NotEnoughCoins(true);
-
-        }
-    }
-    public void LoadLevel3()
-    {
-        if (PlayerInstance.playerInstance.playerData.Coins >= level[2].entryFees)
-        {
-            //if (PlayerInstance.playerInstance.playerData.currentLevelNumber >= 2)
-            {
-
-                PlayerInstance.playerInstance.playerData.DeductCoins(level[2].entryFees);
-                PlayerInstance.playerInstance.SavePlayer();
-                Coins.text = "Coins:" + PlayerInstance.playerInstance.playerData.Coins.ToString();
-                PlayerPrefs.SetString("SelectedLevel", "Level 3");
-                SceneManager.LoadScene("Character Selection");
-                levelSelect.SetActive(false);
-                loadingText.SetActive(true);
-            }
-            //else
-            //{
-            //    levelNotUnlocked.SetActive(true);
-            //}
-        }
-        else
-        {
-            NotEnoughCoins(true);
-        }
-    }
-    public void LoadLevel4()
-    {
-        if (PlayerInstance.playerInstance.playerData.Coins >= level[3].entryFees)
-        {
-            //if (PlayerInstance.playerInstance.playerData.currentLevelNumber >= 3)
-            {
-
-                PlayerPrefs.SetString("SelectedLevel", "Level 4");
-                SceneManager.LoadScene("Character Selection");
-                levelSelect.SetActive(false);
-                loadingText.SetActive(true);
-            }
-            //else
-            //{
-            //    levelNotUnlocked.SetActive(true);
-            //}
-        }
-        else
-        {
-            NotEnoughCoins(true);
-        }
-    }
-    public void LoadLevel5()
-    {
-        if (PlayerInstance.playerInstance.playerData.Coins >= level[4].entryFees)
-        {
-            //if (PlayerInstance.playerInstance.playerData.currentLevelNumber >= 4)
-            {
-                PlayerPrefs.SetString("SelectedLevel", "Level 5");
-                SceneManager.LoadScene("Character Selection");
-                levelSelect.SetActive(false);
-                loadingText.SetActive(true);
-            }
-            //else
-            //{
-            //    levelNotUnlocked.SetActive(true);
-            //}
-        }
-        else
-        {
-            NotEnoughCoins(true);
-        }
-    }
-    #endregion
 
     public void GoToHome()
     {
@@ -244,8 +126,8 @@ public class LevelScreenManager : MonoBehaviour
     private void Update()
     {
         //PlayerInstance.pb.data.levelUnlocked[0] = true;
-        Coins.text = /*"Coins:" +*/ Utility.NumberToWordConverted(PlayerInstance.playerInstance.playerData.Coins);
-        Gems.text = Utility.NumberToWordConverted(PlayerInstance.playerInstance.playerData.Gems);
+        Coins.text = /*"Coins:" +*/ Utility.NumberToWordConverted(PlayerInstance.Instance.Player.coin);
+        Gems.text = Utility.NumberToWordConverted(PlayerInstance.Instance.Player.gem);
         //Debug.Log(PlayerInstance.pb.data.currentLevelNumber);
     }
 

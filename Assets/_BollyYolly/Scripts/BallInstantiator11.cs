@@ -58,18 +58,11 @@ public class BallInstantiator11 : MonoBehaviour
             initialBallSpeed = 2;
         }
     }
-    void SetLevelNumber()
-    //sets current level number int(digit)
-    {
-        levelNumber = globalSceneManager.GetCurrentLevelNumber();
-    }
-
+    
     void Start()
     {
         globalSceneManager = FindObjectOfType<GlobalSceneManager>();
         levelGameManager = FindObjectOfType<LevelGameManager>();
-
-        SetLevelNumber();
 
         shellTranforms[0] = topLeftShell;
         shellTranforms[1] = topRightShell;

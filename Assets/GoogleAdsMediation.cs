@@ -294,22 +294,22 @@ public class GoogleAdsMediation : MonoBehaviour
     {
         if(whatToReward == RewardChecker.coins)
         {
-            PlayerInstance.playerInstance.AddCoins(50);
+            PlayerInstance.Instance.AddCoins(50);
         }
         else if (whatToReward == RewardChecker.gems)
         {
-            PlayerInstance.playerInstance.AddGems(1);
+            PlayerInstance.Instance.AddGems(1);
         }
         else if (whatToReward == RewardChecker.doubleCoins)
         {
             GameOverDataPublisher gameOverDataPublisher = FindObjectOfType<GameOverDataPublisher>();
-            PlayerInstance.playerInstance.AddCoins(gameOverDataPublisher.GetCurrentPrizeAmount());
+            PlayerInstance.Instance.AddCoins(gameOverDataPublisher.GetCurrentPrizeAmount());
             Debug.Log("Coins added " + gameOverDataPublisher.GetCurrentPrizeAmount());
         }
         else if (whatToReward == RewardChecker.quaterCoins)
         {
             GameOverDataPublisher gameOverDataPublisher = FindObjectOfType<GameOverDataPublisher>();
-            PlayerInstance.playerInstance.AddCoins(gameOverDataPublisher.GetCurrentLevelFees() / 4);
+            PlayerInstance.Instance.AddCoins(gameOverDataPublisher.GetCurrentLevelFees() / 4);
         }
     }
 

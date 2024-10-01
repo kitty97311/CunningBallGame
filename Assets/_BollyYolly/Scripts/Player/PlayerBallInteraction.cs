@@ -46,7 +46,7 @@ public class PlayerBallInteraction : MonoBehaviour
         globalSceneManager = FindObjectOfType<GlobalSceneManager>();
         //print(PlayerPrefs.GetString("SelectedLevel"));
         //if(PlayerPrefs.GetString("SelectedLevel") == "Level 1" || PlayerPrefs.GetString("SelectedLevel") == "Level 2" || PlayerPrefs.GetString("SelectedLevel") == "Level 3" || PlayerPrefs.GetString("SelectedLevel") == "Level 6" || PlayerPrefs.GetString("SelectedLevel") == "Level 7" || PlayerPrefs.GetString("SelectedLevel") == "Level 8" || PlayerPrefs.GetString("SelectedLevel") == "Level 9" || PlayerPrefs.GetString("SelectedLevel") == "Level 10")
-        levelNumber = globalSceneManager.GetCurrentLevelNumber();
+        levelNumber = PlayerInstance.Instance.CurrentLevelNumber;
 
         if (levelNumber == 6 || levelNumber == 8)
         {

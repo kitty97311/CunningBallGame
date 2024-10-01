@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -44,6 +42,11 @@ public class GlobalSceneManager : MonoBehaviour
     {
         SceneManager.LoadScene(Constants.SCENE_START);
     }
+    public void LoadPracticeLevel()
+    {
+        PlayerInstance.Instance.CurrentLevelNumber = 0;
+        SceneManager.LoadScene(Constants.SCENE_PRACTICE);
+    }
     public void LoadLevelsScreen()
     //loads levels selection screen
     {
@@ -58,7 +61,7 @@ public class GlobalSceneManager : MonoBehaviour
     {
         return SceneManager.GetActiveScene().name;
     }
-    public int GetCurrentLevelNumber()
+    /*public int GetCurrentLevelNumber()
     //get current stage/level number (digit)
     {
         string sceneName;
@@ -70,5 +73,5 @@ public class GlobalSceneManager : MonoBehaviour
             levelNumber = int.Parse(levelNumb);
         }
         return levelNumber;
-    }
+    }*/
 }

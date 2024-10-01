@@ -26,16 +26,16 @@ public class StoreManager : MonoBehaviour
 
     private void OnEnable()
     {
-        ShowUpdatedCoins(PlayerInstance.playerInstance.playerData.Coins);
-        ShowUpdatedGems(PlayerInstance.playerInstance.playerData.Gems);
-        PlayerInstance.playerInstance.GameCoinsUpdated += ShowUpdatedCoins;
-        PlayerInstance.playerInstance.GameGemsUpdated += ShowUpdatedGems;
+        ShowUpdatedCoins(PlayerInstance.Instance.Player.coin);
+        ShowUpdatedGems(PlayerInstance.Instance.Player.gem);
+        PlayerInstance.Instance.GameCoinsUpdated += ShowUpdatedCoins;
+        PlayerInstance.Instance.GameGemsUpdated += ShowUpdatedGems;
     }
 
     private void OnDisable()
     {
-        PlayerInstance.playerInstance.GameCoinsUpdated -= ShowUpdatedCoins;
-        PlayerInstance.playerInstance.GameGemsUpdated -= ShowUpdatedGems;
+        PlayerInstance.Instance.GameCoinsUpdated -= ShowUpdatedCoins;
+        PlayerInstance.Instance.GameGemsUpdated -= ShowUpdatedGems;
     }
 
     #region Gems Addition
@@ -43,12 +43,12 @@ public class StoreManager : MonoBehaviour
 
     public void AddStackOfGems()
     {
-        PlayerInstance.playerInstance.AddGems(kStackOfGems);
+        PlayerInstance.Instance.AddGems(kStackOfGems);
     }
 
     public void AddBuldeOfGems()
     {
-        PlayerInstance.playerInstance.AddGems(kBundleOfGems);
+        PlayerInstance.Instance.AddGems(kBundleOfGems);
     }
 
     public void ShowUpdatedGems(int amount)
@@ -63,12 +63,12 @@ public class StoreManager : MonoBehaviour
 
     public void AddStackOfCoins()
     {
-        PlayerInstance.playerInstance.AddCoins(kStackOfCoins);
+        PlayerInstance.Instance.AddCoins(kStackOfCoins);
     }
 
     public void AddBuldeOfCoins()
     {
-        PlayerInstance.playerInstance.AddCoins(kBundleOfCoins);
+        PlayerInstance.Instance.AddCoins(kBundleOfCoins);
     }
 
     public void ShowUpdatedCoins(long amount)
